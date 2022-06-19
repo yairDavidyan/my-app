@@ -24,6 +24,11 @@ function Home() {
         findMinMaxPrice(data);
       });
   }, []);
+  if (localProducts) {
+    let categories = localProducts
+      .map((product) => product.category)
+      .filter((value, index, category) => category.indexOf(value) === index);
+  }
 
   function findMinMaxPrice(products: ProductData[]) {
     const prices = products?.map((product) => product.price);
