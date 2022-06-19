@@ -12,6 +12,8 @@ export interface RatingData {
   count: number;
 }
 
-export interface ProductContext {
+export interface ProductContextType {
   filter: () => void;
+  addToCart: (id: number) => void;
+  cart: ProductData[];
 }

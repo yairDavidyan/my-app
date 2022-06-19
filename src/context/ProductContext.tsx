@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import { ProductContext } from "../interfaces/product";
+import { ProductContextType } from "../interfaces/product";
 
-export default createContext<Partial<ProductContext>>({});
+export default createContext<Partial<ProductContextType>>({});

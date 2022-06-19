@@ -1,11 +1,13 @@
 import { IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { useState } from "react";
+import ProductContext from "../../context/ProductContext";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ProductData } from "../../interfaces/product";
 
-function Product({ product } :{ product: ProductData} ) {
-  const [count, setCount] = useState(0);
+function Product({ product }: { product: ProductData }) {
+  const { addToCart } = useContext(ProductContext);
+  // const [count, setCount] = useState(0);
   return (
     <>
       <div className="product-card">
@@ -22,11 +24,10 @@ function Product({ product } :{ product: ProductData} ) {
           <IconButton
             color="primary"
             aria-label="add to shopping cart"
-            onClick={() => setCount((prev) => prev + 1)}
+            onClick={() => addToCart(product.id)}
           >
             <AddShoppingCartIcon />
           </IconButton>
-          <h6>{count}</h6>
         </span>
       </div>
     </>

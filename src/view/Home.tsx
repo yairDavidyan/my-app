@@ -2,7 +2,7 @@ import Header from "../components/header/header";
 import Products from "../components/products/Products";
 import { useEffect, useState } from "react";
 import ProductContext from "../context/ProductContext";
-import Cart from "../components/Cart";
+import Cart from "../components/cart/Cart";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ProductData } from "../interfaces/product";
@@ -15,19 +15,27 @@ function Home() {
   const [minMax, setMinMax] = useState<number[] | number>([]);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [cart, setCart] = useState<ProductData[]>([]);
+
   useEffect(() => {
-    fetch(`https://bedecked-stone-turret.glitch.me/products`)
+    fetch(`https://fakestoreapi.com/products`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
         setLocalProducts(data);
         findMinMaxPrice(data);
+        setCategory(data);
       });
   }, []);
-  if (localProducts) {
-    let categories = localProducts
-      .map((product) => product.category)
-      .filter((value, index, category) => category.indexOf(value) === index);
+
+  function setCategory(products) {
+    if (localProducts) {
+      let categories = products
+        .map((product) => product.category)
+        .filter((value, index, category) => category.indexOf(value) === index);
+      setCategories(categories);
+    }
   }
 
   function findMinMaxPrice(products: ProductData[]) {
@@ -40,6 +48,17 @@ function Home() {
       setMinMax([minPrice, maxPrice]);
     }
   }
+  function addToCart(id: number) {
+    const addToCart = [
+      ...cart,
+      localProducts.find((product) => {
+        return product.id === id;
+      }),
+    ] as ProductData[];
+    console.log("sd");
+
+    setCart(addToCart);
+  }
 
   function filter() {
     if (isArray(minMax)) {
@@ -49,15 +68,23 @@ function Home() {
       setProducts(filterProducts);
     }
   }
+  function categotyFilter(category) {
+    let newProducts =
+      category === "All"
+        ? localProducts
+        : localProducts.filter((product) => category === product.category);
+    console.log(newProducts);
+    setProducts(newProducts);
+  }
   return (
     <>
-      <ProductContext.Provider value={{ filter }}>
+      <ProductContext.Provider value={{ filter, cart, addToCart }}>
         <nav>
           <Link to="/about">About</Link>
         </nav>
-        <Header />
+        <Header categories={categories} filterByCategory={categotyFilter} />
         <Button onClick={() => setShowCart(true)}>Open Cart </Button>
-        {showCart && <Cart />}
+        {showCart && <Cart setShowCart={setShowCart} />}
         <Products
           products={products}
           minMax={minMax}

@@ -1,37 +1,27 @@
-import * as React from "react";
+import { useState } from "react";
 
-function Header() {
+function Header({ categories, filterByCategory }) {
+  function selectCategory(event) {
+    filterByCategory(event.target.value);
+    setCurrentCategory(event.target.value);
+  }
+  const [currentCategory, setCurrentCategory] = useState("All");
+
   return (
     <>
       <nav className="product-filter">
-        <h1>Jackets</h1>
-
+        <h1>{currentCategory}</h1>
         <div className="sort">
           <div className="collection-sort">
-            <label>Filter by:</label>
-            <select>
-              <option value="/">All Jackets</option>
-              <option value="/">2016</option>
-              <option value="/">jacket</option>
-              <option value="/">Jackets</option>
-              <option value="/">layers</option>
-              <option value="/">Obermeyer</option>
-              <option value="/">Roxy</option>
-              <option value="/">womens</option>
-            </select>
-          </div>
-
-          <div className="collection-sort">
             <label>Sort by:</label>
-            <select>
-              <option value="/">Featured</option>
-              <option value="/">Best Selling</option>
-              <option value="/">Alphabetically, A-Z</option>
-              <option value="/">Alphabetically, Z-A</option>
-              <option value="/">Price, low to high</option>
-              <option value="/">Price, high to low</option>
-              <option value="/">Date, new to old</option>
-              <option value="/">Date, old to new</option>
+            <select onChange={selectCategory}>
+              {categories}
+              <option value="All">All</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
         </div>

@@ -1,0 +1,8 @@
+.image-size{
+    width: 120px;
+
+}
+.cart-container{
+    display: flex;
+    justify-content: start;
+}
