@@ -5,6 +5,7 @@ export interface ProductData {
   category: string;
   image: string;
   rating: RatingData;
+  amount?: number;
 }
 
 export interface RatingData {
@@ -15,5 +16,9 @@ export interface RatingData {
 export interface ProductContextType {
   filter: () => void;
   addToCart: (id: number) => void;
+  removeFromCart: (id: number) => void;
   cart: ProductData[];
+  products: ProductData[];
+  localProductAmaount: number;
+  setLocalProductAmaount: React.Dispatch<React.SetStateAction<number>>;
 }

@@ -7,14 +7,13 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ProductData } from "../../interfaces/product";
-import "./productDetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState<ProductData>();
   const [loader, setLoader] = useState<Boolean>(false);
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${id}`)
+    fetch(`/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .then(() => setLoader(true));

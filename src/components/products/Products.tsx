@@ -1,9 +1,8 @@
-import { Box, Slider } from "@mui/material";
+import { Box, Grid, Slider } from "@mui/material";
 import { useContext } from "react";
 import productContext from "../../context/ProductContext";
 import { ProductData } from "../../interfaces/product";
-import Product from "../product/product";
-import "./products.css";
+import ProductCard from "../card/ProductCard";
 
 function Products({
   products,
@@ -18,7 +17,7 @@ function Products({
   max: number;
   setMinMax: React.Dispatch<React.SetStateAction<number[] | number>>;
 }) {
-  const { filter } = useContext(productContext);
+  const { filter, cart } = useContext(productContext);
   function handleChange(
     event: Event,
     newValue: number[] | number,
@@ -39,11 +38,19 @@ function Products({
           valueLabelDisplay="auto"
         />
       </Box>
-      <section className="products">
+      <Grid padding={6} container spacing={2}>
         {products.map((product) => (
-          <Product product={product} key={product.id} />
+          <Grid item xs={2}>
+            <ProductCard
+              amount={cart.find((item) => item.id === product.id)?.amount}
+              product={product}
+              imageSize={350}
+              key={product.id}
+              isFlex={false}
+            />
+          </Grid>
         ))}
-      </section>
+      </Grid>
     </>
   );
 }

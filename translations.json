@@ -1,9 +1,10 @@
 [
     {
-        "car":"מכונית"
+        "en":"car",
+        "he":"meconit"
     },
     {
         "en":"apple",
-        "he":"תפוח"
+        "he":"tapoh"
     }
 ]

@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
+const fsp = require("fs/promises");
 
 app.use(express.json());
 
@@ -32,26 +33,25 @@ app.get("/products/:id", (req, res) => {
   });
 });
 app.post("/products", (req, res) => {
-  const title = {
-    id: 22,
-    title: req.body.title,
-    price: 125,
-    description: "Your perfect pack for everyday usy",
-    categor: "mens clothing",
-    image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-    rating: {
-      rate: 3.9,
-      count: 120,
-    },
-  };
-  let productsArr;
-  fs.readFile("products.json", "utf8", (err, resFile) => {
-    productsArr = JSON.parse(resFile);
-    productsArr.push(title);
+  const { title, price, category } = req.body;
+  fsp.readFile("products.json", "utf-8").then((data) => {
+    const productsArr = JSON.parse(data);
+    productsArr.push({
+      id: "434",
+      title,
+    });
     fs.writeFile("products.json", JSON.stringify(productsArr), (err) => {
       res.send("success");
     });
   });
+
+  // fsp.readFile("products.json", "utf8", (err, resFile) => {
+  //   productsArr = JSON.parse(resFile);
+  //   productsArr.push(title);
+  //   fs.writeFile("products.json", JSON.stringify(productsArr), (err) => {
+  //     res.send("success");
+  //   });
+  // });
 });
 app.put("/products/:id", (req, res) => {
   const { title, completed = false } = req.body;
