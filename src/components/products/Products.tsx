@@ -17,6 +17,9 @@ function Products({
   max: number;
   setMinMax: React.Dispatch<React.SetStateAction<number[] | number>>;
 }) {
+  function productAmount(id: number) {
+    return cart.find((item) => item.id === id)?.amount;
+  }
   const { filter, cart } = useContext(productContext);
   function handleChange(
     event: Event,
@@ -42,7 +45,7 @@ function Products({
         {products.map((product) => (
           <Grid item xs={2}>
             <ProductCard
-              amount={cart.find((item) => item.id === product.id)?.amount}
+              amount={productAmount(product.id)}
               product={product}
               imageSize={350}
               key={product.id}

@@ -50,9 +50,7 @@ function Header({ categories, filterByCategory, setShowCart }) {
               </Select>
             </FormControl>
           </Box>
-          <IconButton
-            onClick={() => (cart.length > 0 ? setShowCart(true) : "")}
-          >
+          <IconButton onClick={() => setShowCart(true)}>
             <AddShoppingCartIcon sx={{ color: "#ed1566" }} />
           </IconButton>
           <Link style={{ color: "#ed1566" }} to="/about">

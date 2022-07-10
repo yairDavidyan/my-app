@@ -15,6 +15,9 @@ function Home() {
   const [maxPrice, setMaxPrice] = useState<number>(0);
   const [categories, setCategories] = useState<string[]>([]);
   const [cart, setCart] = useState<ProductData[]>([]);
+  const [productsListToRemove, setProductsListToRemove] = useState<number[]>(
+    []
+  );
 
   useEffect(() => {
     fetch("/products")
@@ -32,6 +35,7 @@ function Home() {
       let categories = products
         .map((product) => product.category)
         .filter((value, index, category) => category.indexOf(value) === index);
+
       setCategories(categories);
     }
   }
@@ -48,32 +52,44 @@ function Home() {
   }
 
   function addToCart(id: number) {
-    const localProduct = cart.find((product) => product.id === id);
-    if (localProduct) {
+    const productAdd = cart.find((product) => product.id === id);
+    if (productAdd) {
       setCart(
-        cart.map((item) =>
-          item.id === localProduct.id
-            ? { ...localProduct, amount: localProduct.amount + 1 }
-            : item
+        cart.map((product) =>
+          product.id === productAdd.id
+            ? { ...productAdd, amount: productAdd.amount + 1 }
+            : product
         )
       );
     } else {
       const product = localProducts.find((product) => product.id === id);
-      setCart((prev) => [...prev, { ...product, amount: 1 }]);
+      setCart((prevProducts) => [...prevProducts, { ...product, amount: 1 }]);
     }
   }
+
   function removeFromCart(id: number) {
-    const indexProduct = cart.findIndex((product) => product.id === id);
-    const localProduct = cart.find((product) => product.id === id);
-    if (indexProduct >= 0) {
+    const productRemove = cart.find((product) => product.id === id);
+    if (productRemove) {
       setCart(
-        cart.map((item) =>
-          item.id === localProduct.id
-            ? { ...localProduct, amount: localProduct.amount - 1 }
-            : item
+        cart.map((product) =>
+          product.id === productRemove.id
+            ? { ...productRemove, amount: productRemove.amount - 1 }
+            : product
         )
       );
     }
+  }
+
+  function removeAllCart() {
+    setCart([]);
+  }
+  console.log(cart);
+
+  function selectedRemove() {
+    setCart(
+      cart.filter((product) => !productsListToRemove.includes(product.id))
+    );
+    setProductsListToRemove([]);
   }
 
   function filter() {
@@ -84,6 +100,7 @@ function Home() {
       setProducts(filterProducts);
     }
   }
+
   function categotyFilter(category) {
     let newProducts =
       category === "All"
@@ -92,16 +109,31 @@ function Home() {
     console.log(newProducts);
     setProducts(newProducts);
   }
+  console.log(productsListToRemove);
+
   return (
     <ProductContext.Provider
-      value={{ filter, cart, addToCart, removeFromCart }}
+      value={{
+        filter,
+        cart,
+        addToCart,
+        removeFromCart,
+        productsListToRemove,
+        setProductsListToRemove,
+        selectedRemove,
+      }}
     >
       <Header
         categories={categories}
         filterByCategory={categotyFilter}
         setShowCart={setShowCart}
       />
-      <Cart setShowCart={setShowCart} showCart={showCart} />
+      <Cart
+        setShowCart={setShowCart}
+        showCart={showCart}
+        removeAllCart={removeAllCart}
+        productsListToRemove={productsListToRemove}
+      />
       <Products
         products={products}
         minMax={minMax}

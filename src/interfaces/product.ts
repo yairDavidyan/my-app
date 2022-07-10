@@ -20,5 +20,8 @@ export interface ProductContextType {
   cart: ProductData[];
   products: ProductData[];
   localProductAmaount: number;
+  productsListToRemove: number[];
+  setProductsListToRemove: React.Dispatch<React.SetStateAction<number[]>>;
   setLocalProductAmaount: React.Dispatch<React.SetStateAction<number>>;
+  selectedRemove: () => void;
 }

@@ -20,7 +20,7 @@ app.get("/products/:id", (req, res) => {
   fsp.readFile("products.json", "utf-8").then((data) => {
     const productArr = JSON.parse(data);
     const filterArr = productArr.find((product) => product.id === +id);
-    res.send(filterArr);
+    filterArr ? res.send(filterArr) : res.send("not found");
   });
 });
 app.post("/products", (req, res) => {
@@ -33,8 +33,43 @@ app.post("/products", (req, res) => {
       price,
       categort,
     });
-
-    res.send("done");
+    fsp
+      .writeFile("products.json", JSON.stringify(productArr))
+      .then(() => {
+        res.send("success");
+      })
+      .catch((err) => res.send("not delete"));
+  });
+});
+app.patch("/products/:id", (req, res) => {
+  const { id } = req.params;
+  if (id && req.body) {
+    fsp.readFile("products.json", "utf-8").then((data) => {
+      const productArr = JSON.parse(data);
+      const updateArr = productArr.map((product) =>
+        product.id === +id ? { ...product, ...req.body } : product
+      );
+      console.log(updateArr);
+      fsp
+        .writeFile("products.json", JSON.stringify(updateArr))
+        .then(() => {
+          res.send("success");
+        })
+        .catch((err) => console.log(err));
+    });
+  }
+});
+app.delete("/products/:id", (req, res) => {
+  fsp.readFile("products.json", "utf-8").then((data) => {
+    const { id } = req.params;
+    const productsArr = JSON.parse(data);
+    const updateArr = productsArr.filter((product) => product.id !== +id);
+    fsp
+      .writeFile("products.json", JSON.stringify(updateArr))
+      .then(() => {
+        res.send("success");
+      })
+      .catch((err) => res.send("not delete"));
   });
 });
 app.listen(8080);
