@@ -4,7 +4,17 @@ import mongoose from "mongoose";
 const app = express();
 app.use(express.json());
 
-const Product = mongoose.model("Product", { title: String, price: Number });
+const Product = mongoose.model("Product", {
+  title: String,
+  price: Number,
+  description: String,
+  category: String,
+  image: String,
+  rating: {
+    rate: Number,
+    count: Number,
+  },
+});
 
 app.get("/products", (req, res) => {
   const { title } = req.query;
@@ -35,11 +45,16 @@ app.get("/products/:id", (req, res) => {
 });
 
 app.post("/products", (req, res) => {
-  const { title, price } = req.body;
+  const { title, price, description, category, image, rating } = req.body;
+  console.log(req.body);
   Product.insertMany([
     {
       title,
       price,
+      description,
+      category,
+      image,
+      rating,
     },
   ]).then((products) => {
     res.send(products);

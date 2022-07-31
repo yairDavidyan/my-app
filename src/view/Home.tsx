@@ -1,5 +1,6 @@
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { isArray, max, min } from "lodash";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Cart from "../components/cart/Cart";
 import Header from "../components/header/header";
 import Products from "../components/products/Products";
@@ -18,6 +19,9 @@ function Home() {
   const [productsListToRemove, setProductsListToRemove] = useState<number[]>(
     []
   );
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState([]);
+  const loading = open && options.length === 0;
 
   useEffect(() => {
     fetch("/products")
@@ -35,7 +39,6 @@ function Home() {
       let categories = products
         .map((product) => product.category)
         .filter((value, index, category) => category.indexOf(value) === index);
-
       setCategories(categories);
     }
   }
@@ -127,6 +130,38 @@ function Home() {
         categories={categories}
         filterByCategory={categotyFilter}
         setShowCart={setShowCart}
+      />
+      <Autocomplete
+        id="asynchronous-demo"
+        sx={{ width: 300 }}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
+        isOptionEqualToValue={(option, value) => option.title === value.title}
+        getOptionLabel={(option) => option.title}
+        options={options}
+        loading={loading}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Asynchronous"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <Fragment>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </Fragment>
+              ),
+            }}
+          />
+        )}
       />
       <Cart
         setShowCart={setShowCart}

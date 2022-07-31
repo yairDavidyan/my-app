@@ -1,5 +1,5 @@
 import { Box, Grid, Slider } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import productContext from "../../context/ProductContext";
 import { ProductData } from "../../interfaces/product";
 import ProductCard from "../card/ProductCard";
@@ -17,6 +17,17 @@ function Products({
   max: number;
   setMinMax: React.Dispatch<React.SetStateAction<number[] | number>>;
 }) {
+  const isInitiallyVisible = false;
+  const [isKeyboardVisible, setKeyboardVisible] = useState(isInitiallyVisible);
+
+  useEffect(() => {
+    console.log("dsd");
+
+    // toggle isKeyboardVisible on event listener triggered
+    window.visualViewport.addEventListener("resize", () => {
+      setKeyboardVisible(!isKeyboardVisible);
+    });
+  }, [isKeyboardVisible]);
   function productAmount(id: number) {
     return cart.find((item) => item.id === id)?.amount;
   }

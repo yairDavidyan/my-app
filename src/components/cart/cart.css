@@ -1,8 +1,7 @@
-.image-size{
-    width: 120px;
-
+.image-size {
+  width: 120px;
 }
-.cart-container{
-    display: flex;
-    justify-content: start;
+.cart-container {
+  display: flex;
+  justify-content: start;
 }
